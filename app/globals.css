@@ -1,26 +1,220 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Token warna. Dark default; light lewat [data-theme="light"].
+   Teks dan aksen dijaga kontrasnya (WCAG AA) di kedua tema.
+   ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #1e5bd8;
+  --dark: #0b2a6f;
+  --accent: #38bdf8;
+  --accent-ink: #38bdf8;
+  --bg: #070b1a;
+  --bg2: #0b1228;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(11, 18, 40, 0.8);
+  --line: rgba(148, 197, 255, 0.14);
+  --text: #e6edf7;
+  --muted: #94a3b8;
+  --grid: rgba(148, 197, 255, 0.07);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #f4f7fd;
+  --bg2: #ffffff;
+  --surface: #ffffff;
+  --surface-strong: rgba(255, 255, 255, 0.9);
+  --line: rgba(30, 91, 216, 0.16);
+  --text: #0f172a;
+  --muted: #475569;
+  --accent-ink: #0369a1;
+  --grid: rgba(30, 91, 216, 0.08);
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-dark: var(--dark);
+  --color-accent: var(--accent);
+  --color-bg: var(--bg);
+  --color-bg2: var(--bg2);
+  --color-line: var(--line);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+section {
+  scroll-margin-top: 80px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.skip-link:focus {
+  top: 16px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Latar section dengan pola sirkuit tipis */
+.circuit {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Kartu kaca tipis (glassmorphism ringan) */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.heading-gradient {
+  background: linear-gradient(90deg, #60a5fa, var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+:root[data-theme="light"] .heading-gradient {
+  background: linear-gradient(90deg, var(--primary), #0369a1);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 8px 30px -8px rgba(30, 91, 216, 0.7);
+}
+.btn-primary:hover {
+  background: #2a6af0;
+  transform: translateY(-2px);
+}
+.btn-outline {
+  border-color: var(--line);
+  color: var(--text);
+  background: var(--surface);
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Cetak sebagai CV sederhana */
+@media print {
+  @page { size: A4; margin: 14mm; }
+  body { background: #fff !important; color: #000 !important; }
+  .no-print,
+  header,
+  .hero-canvas,
+  .circuit,
+  .theme-toggle { display: none !important; }
+  .glass { background: #fff !important; border-color: #bbb !important; box-shadow: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  section { padding: 12pt 0 !important; break-inside: auto; }
+  .card-avoid-break { break-inside: avoid; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #333; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Animasi scroll (CSS). Tersembunyi hanya jika JavaScript aktif (class "js" di <html>). */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+.bar-fill {
+  width: var(--w);
+  transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.js .bar-fill:not(.is-in) {
+  width: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .js .bar-fill:not(.is-in) { width: var(--w); }
 }
